@@ -37,4 +37,23 @@ public class StudentController {
     public <addStudentRequestDto> ResponseEntity<StudentDto> createNewStudent(@RequestBody AddStudentRequestDto addStudentRequestDto){
         return  ResponseEntity.status(HttpStatus.OK).body(studentService.createNewStudetn(addStudentRequestDto));
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentDto> updateStudent(
+            @PathVariable Long id,
+            @RequestBody AddStudentRequestDto addStudentRequestDto) {
+
+        StudentDto updatedStudent =
+                studentService.updateStudent(id, addStudentRequestDto);
+
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+
+        studentService.deleteStudent(id);
+
+        return ResponseEntity.ok("Student deleted successfully");
+    }
+
 }

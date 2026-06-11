@@ -26,8 +26,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentDto> getAllStudents() {
         List<Student> students = studentRepository.findAll();
+
         return students.stream()
-                .map(student -> modelMapper.map(students,StudentDto.class))
+                .map(student -> modelMapper.map(student, StudentDto.class))
                 .toList();
     }
 
@@ -44,5 +45,31 @@ public class StudentServiceImpl implements StudentService {
 
 
         return modelMapper.map(student,StudentDto.class);
+    }
+
+    @Override
+    public StudentDto updateStudent(Long id,
+                                    AddStudentRequestDto addStudentRequestDto) {
+
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Student not found with id: " + id));
+
+        student.setName(addStudentRequestDto.getName());
+        student.setEmail(addStudentRequestDto.getEmail());
+
+        Student updatedStudent = studentRepository.save(student);
+
+        return modelMapper.map(updatedStudent, StudentDto.class);
+    }
+
+    @Override
+    public void deleteStudent(Long id) {
+
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Student not found with id: " + id));
+
+        studentRepository.delete(student);
     }
 }
